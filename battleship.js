@@ -1,9 +1,15 @@
+/*  ********************************************************************************************************************************
+/
+/                       READ ALL COMMENTS AND MAKE CHANGES / ADD FUNCTIONALITY. LEAVE NO UNUSED CODE OR COMMENTS
+/
+************************************************************************************************************************************/
+
 class Spaceship {
     constructor() {
-        this.name = 'USS Assembly';
-        this.hull = 20; //hitpoints, when this drops to or below 0, the ship is destroyed.
-        this.firepower = 5; //The amount of damage done per attack.
-        this.accuracy = .7; //chances of hitting a target;
+        this.name = 'Spaceship';
+        this.hull = 20; 
+        this.firepower = 5; 
+        this.accuracy = .7; 
     }
 
     getHull() {
@@ -23,8 +29,15 @@ class Spaceship {
     }
 } // end Spaceship class
 
-class Alien {
+class Playership extends Spaceship {
     constructor() {
+        super();
+        this.name = 'USS Assembly';
+    }
+}
+class Alien extends Spaceship{
+    constructor() {
+        super();
         this.name = 'Alien';
         this.hull = this.#determineValue(7, 20);
         this.firepower = this.#determineValue(2, 5);
@@ -46,7 +59,6 @@ class Alien {
         }
     }
 
-
     getHull() {
         return this.hull;
     }
@@ -67,11 +79,11 @@ class Alien {
 class Gameboard { //this is a class where we can perform the key functionality of the game.
     constructor() {
         this.name = 'Space Battle';
-        this.player = new Spaceship();
+        this.player = new Playership();
         this.alienPlayers = this.#generateAliens();
     }
 
-    #generateAliens() {
+    #generateAliens() { //later add default for user choice  generateAliens(userChoice = random or whatever)
         let result = [];
         let numberOfAliens = Math.ceil(Math.random() * 5);
 
@@ -116,27 +128,57 @@ class Gameboard { //this is a class where we can perform the key functionality o
     playRound() {
         let player = this.player;
         let alien = this.pickTarget();
-        
+        let winnerOfRound;
+
         while (true) {
             let playerAttackResult = this.playerAttack(player, alien);
             if (this.isTheShipDestroyed(playerAttackResult)) {
                 console.log('%c I destroyed an alien ship!', 'color: green');
-                return 'player';
+                winnerOfRound = 'player';
+                this.alienPlayers.pop();
+                return winnerOfRound;
             }
 
             let alienAttackResult = this.alienAttack(alien, player);
 
             if (this.isTheShipDestroyed(alienAttackResult)) {
                 console.log('%c I destroyed the USS Assembly!', 'color: red');
-                return 'alien';
+                winnerOfRound = 'alien';
+                return winnerOfRound;
             }
         }
     }
 
+    // retreat() {  I will need to add functionality to this when applying to html
 
+    // }
 
+    exitGame(result) {
+        console.log(`The ${result} won!`);
+        //add replay feature
+    }
+
+    playGame() {
+        let winnerOfGame;
+
+        while (winnerOfGame != 'alien' || this.alienPlayers.length != 0) {
+            console.log(`current length = ${this.alienPlayers.length}`);
+            winnerOfGame = this.playRound();
+
+            if (this.alienPlayers.length == 0) {
+                return this.exitGame(winnerOfGame);
+            }
+
+            if (winnerOfGame == 'alien') {
+                return this.exitGame(winnerOfGame)
+            }
+            console.log(`players hull = ${this.player.getHull()}`)
+            //this.retreat(); uncomment when added to html
+        }
+    }
 } // end Gameboard class
 
 
-let game = new Gameboard();
-game.playRound();
+let play = new Gameboard();
+play.playGame();
+
