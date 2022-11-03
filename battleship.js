@@ -34,7 +34,8 @@ class Playership extends Spaceship {
         super();
         this.name = 'USS Assembly';
     }
-}
+} //end Playership class
+
 class Alien extends Spaceship{
     constructor() {
         super();
@@ -44,7 +45,8 @@ class Alien extends Spaceship{
         this.accuracy = this.#determineValue(.6, .9);
     }
 
-    #determineValue(minInclusive, maxExclusive) { // Private method to determine created values.
+    // Private method to determine randomized property values.
+    #determineValue(minInclusive, maxExclusive) { 
         let min;
         let max;
 
@@ -59,33 +61,20 @@ class Alien extends Spaceship{
         }
     }
 
-    getHull() {
-        return this.hull;
-    }
-
-    getFirepower() {
-        return this.firepower;
-    }
-
-    getAccuracy() {
-        return this.accuracy;
-    }
-
-    setHull(value) {
-        this.hull = value;
-    }
 } //end Alien class
 
-class Gameboard { //this is a class where we can perform the key functionality of the game.
+//this is the class where we can perform the key functionality of the game.
+class Gameboard { 
     constructor() {
         this.name = 'Space Battle';
         this.player = new Playership();
-        this.alienPlayers = this.#generateAliens();
+        //generate a chosen value or default to a range between 1-6
+        this.alienPlayers = this.#generateAliens(value = Math.ceil(Math.random() * 5)); 
     }
-
-    #generateAliens() { //later add default for user choice  generateAliens(userChoice = random or whatever)
+    
+    #generateAliens() { 
         let result = [];
-        let numberOfAliens = Math.ceil(Math.random() * 5);
+        let numberOfAliens = value;
 
         for (let i = 0; i < numberOfAliens; i++) {
             result.push(new Alien());
@@ -162,7 +151,6 @@ class Gameboard { //this is a class where we can perform the key functionality o
         let winnerOfGame;
 
         while (winnerOfGame != 'alien' || this.alienPlayers.length != 0) {
-            console.log(`current length = ${this.alienPlayers.length}`);
             winnerOfGame = this.playRound();
 
             if (this.alienPlayers.length == 0) {
@@ -172,13 +160,12 @@ class Gameboard { //this is a class where we can perform the key functionality o
             if (winnerOfGame == 'alien') {
                 return this.exitGame(winnerOfGame)
             }
-            console.log(`players hull = ${this.player.getHull()}`)
             //this.retreat(); uncomment when added to html
         }
     }
 } // end Gameboard class
 
 
-let play = new Gameboard();
-play.playGame();
+
+
 
