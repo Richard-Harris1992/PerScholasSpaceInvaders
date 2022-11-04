@@ -8,6 +8,8 @@
     background-size: 100%;
     background-color: black;
     color: white;
+    
+    
 }
 
 * {
@@ -26,6 +28,24 @@
     width: 100%;
     z-index: 30;
     background-color: black;
+}
+.retreatModal {
+    
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    gap: 20px;
+    background-color: white;
+    opacity: .8;
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+} 
+
+.removeModal {
+    display: none
 }
 
 .animate>p {

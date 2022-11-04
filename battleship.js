@@ -47,8 +47,9 @@ class Alien extends Spaceship{
         this.hull = this.#determineValue(7, 20);
         this.firepower = this.#determineValue(2, 5);
         this.accuracy = this.#determineValue(.6, .9);
+        this.HTMLElement = null;
     }
-
+//add to prop./\
     // Private method to determine randomized property values.
     #determineValue(minInclusive, maxExclusive) { 
         let min;
@@ -73,25 +74,32 @@ class Gameboard {
         this.name = 'Space Battle';
         this.player = new Playership();
         this.alienPlayers = this.#generateAliens();
+        this.alienPlayersOnHTML = this.#addAlienImage();
+       
     }
 
-    #addAlienImage(squareOfNumberOfAliens) {
-        let alienContainer = document.querySelector('.enemyStage');
-        alienContainer.style.gridTemplateColumns = (`repeat(${squareOfNumberOfAliens}, 1fr`);
-        alienContainer.style.gridTemplateRows = (`repeat(${squareOfNumberOfAliens}, 1fr`);
-        let alienImg = document.createElement('div');
-        alienImg.classList = 'enemyImage';
-        alienContainer.appendChild(alienImg);
-    }
     
     #generateAliens() { 
         let result = [];
         let numberOfAliens = Math.ceil(Math.random() * 6) // <=== add helper function here to ask for a value
-        let squareOfAliensForGrid = Math.ceil(Math.sqrt(numberOfAliens));
         for (let i = 0; i < numberOfAliens; i++) {
             result.push(new Alien());
-            this.#addAlienImage(squareOfAliensForGrid);
         }
+        return result;
+    }
+
+    #addAlienImage() {
+        let result = [];
+        let squareOfAliensForGrid = Math.ceil(Math.sqrt(this.alienPlayers.length));
+        let alienContainer = document.querySelector('.enemyStage');
+        alienContainer.style.gridTemplateColumns = (`repeat(${squareOfAliensForGrid}, 1fr`);
+        alienContainer.style.gridTemplateRows = (`repeat(${squareOfAliensForGrid}, 1fr`);
+        this.alienPlayers.forEach(element => {
+            let alienImg = document.createElement('div');
+            alienImg.classList = 'enemyImage';
+            result.push(alienImg);
+            alienContainer.appendChild(alienImg); 
+        });
         return result;
     }
 
@@ -113,10 +121,8 @@ class Gameboard {
 
     pickTarget() {
         return this.alienPlayers[this.alienPlayers.length - 1];
-
-        //add click event listener to choose who to destory;
     }
-
+    
     hitOrMiss(accuracy) {
         return Math.random() < accuracy ? true : false;
     }
@@ -171,42 +177,62 @@ class Gameboard {
         }
     }
 
-    // retreat() {  I will need to add functionality to this when applying to html
-
-    // }
+    retreat() {  //I will need to add functionality to this when applying to html
+        let retreatModal = document.querySelector('#modal');
+        retreatModal.classList = 'retreatModal';
+        
+    }
 
     exitGame(result) {
         console.log(`The ${result} won!`);
         //add replay feature
     }
 
-    playGame() {
-        let winnerOfGame;
-
-        while (winnerOfGame != 'alien' || this.alienPlayers.length != 0) {
-            winnerOfGame = this.playRound();
-
-            if (this.alienPlayers.length == 0) {
-                return this.exitGame(winnerOfGame);
-            }
-
-            if (winnerOfGame == 'alien') {
-                return this.exitGame(winnerOfGame)
-            }
-            //this.retreat(); uncomment when added to html
-        }
-    }
+    
 } // end Gameboard class
 
 
-   
+let game = new Gameboard();
+
+function playGame() {
+    let winnerOfGame;
+
+        
+        winnerOfGame = game.playRound();
+
+        if (game.alienPlayers.length == 0) {
+            return game.exitGame(winnerOfGame);
+        }
+
+        if (winnerOfGame == 'alien') {
+            return game.exitGame(winnerOfGame)
+        }
+        game.retreat();
+    
+    
+ }
+
 
 let startButton = document.querySelector('.animate > button');
 startButton.addEventListener('click', function(e) {
     let introText = document.querySelector('.animate');
     introText.remove();
-    let game = new Gameboard();
-    game.playGame();
+    console.log(game.alienPlayers)
+    console.log(game.alienPlayersOnHTML)
+    
+});
+
+let retreatButton = document.querySelector('.retreat');
+    retreatButton.addEventListener('click', function(e) {
+    game.player.setHull(20);
+    let retreatModal = document.querySelector('#modal');
+    retreatModal.classList = 'removeModal';
+    
+});
+
+let namebox = document.querySelector('.nameBox');
+namebox.addEventListener('click', function(e) {
+    playGame();
 });
 
 
