@@ -199,8 +199,14 @@ class Gameboard {
 } // end Gameboard class
 
 
+   
 
-let game = new Gameboard();
-console.log(game.alienPlayers.length)
-game.playGame()
+let startButton = document.querySelector('.animate > button');
+startButton.addEventListener('click', function(e) {
+    let introText = document.querySelector('.animate');
+    introText.remove();
+    let game = new Gameboard();
+    game.playGame();
+});
+
 

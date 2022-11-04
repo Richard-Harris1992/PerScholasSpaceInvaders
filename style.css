@@ -1,6 +1,5 @@
-.bodyContainer{
+.bodyContainer {
     display: flex;
-   
     justify-content: space-between;
     height: 100vh;
     width: 100vw;
@@ -10,27 +9,102 @@
     background-color: black;
     color: white;
 }
-*{
+
+* {
     margin: 0;
     padding: 0;
 }
 
-.mainCharacterView{
-
-width: 50%;
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-align-items: center;
+.animate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 50px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 30;
+    background-color: black;
 }
-/* .left{
 
+.animate>p {
+    color: black;
+    font-size: 40px;
+    font-family: 'Share Tech Mono', monospace;
 }
-.right{
-    
-} */
 
-.nameBox{
+.text1 {
+    animation-name: fade-in;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+.text2 {
+    animation-name: fade-in;
+    animation-delay: 3s;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+.text3 {
+    animation-name: fade-in;
+    animation-delay: 6s;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+.text4 {
+    animation-name: fade-in;
+    animation-duration: 4s;
+    animation-delay: 9s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+    from {
+        color: black;
+    }
+
+    to {
+        color: white;
+    }
+}
+
+.animate>button {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: black;
+    padding: 10px 50px;
+    font-size: 40px;
+    animation-name: enter-the-matrix;
+    animation-duration: 4s;
+    animation-delay: 10s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes enter-the-matrix {
+    from {
+        box-shadow: none;
+        color: black;
+    }
+
+    to {
+        box-shadow: 0px 0px 20px 10px white;
+        color: white;
+    }
+}
+
+
+.mainCharacterView {
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nameBox {
     border: 1px solid black;
     width: 25vw;
     height: 10vh;
@@ -42,20 +116,19 @@ align-items: center;
     box-shadow: 0px 0px 20px 10px white;
 
 }
-.playerImage{
+
+.playerImage {
     border: 1px solidblack;
     width: 30vw;
     height: 40vh;
     background-image: url("/images/space_hero.gif");
-    background-size: cover ;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 10px white;
-    
-
-    
 }
-.playerStats{
+
+.playerStats {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,8 +139,6 @@ align-items: center;
     font-size: 1.5em;
     box-shadow: 0px 0px 20px 10px white;
     border-radius: 2%;
-
-
 }
 
 .enemyStage {
@@ -76,10 +147,10 @@ align-items: center;
     height: 35vh;
 }
 
-.enemyImage{
+.enemyImage {
     border: 1px solidblack;
     background-image: url("/images/enemy.gif");
-    background-size: cover ;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 10px white;
@@ -88,13 +159,14 @@ align-items: center;
 .fire {
     border: 1px solidblack;
     background-image: url("/images/fire.gif");
-    background-size: cover ;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 10px white;
     z-index: 20;
 }
-.enemyStats{
+
+.enemyStats {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,5 +177,4 @@ align-items: center;
     font-family: 'Share Tech Mono', monospace;
     font-size: 1.5em;
     box-shadow: 0px 0px 20px 10px white;
-
 }
