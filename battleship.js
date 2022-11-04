@@ -4,6 +4,10 @@
 /
 ************************************************************************************************************************************/
 
+//Initial thoughts, add functionality in the methods when available. If I cannot directly use the method to do something I will need to create a
+//function and add it to the other methods. example = generate aliens vs a method to popup and choose enemy amounts.
+//CSS for style JS for functionality i.e add classes in css and use JS to modify classes to style accordingly.
+
 class Spaceship {
     constructor() {
         this.name = 'Spaceship';
@@ -68,22 +72,49 @@ class Gameboard {
     constructor() {
         this.name = 'Space Battle';
         this.player = new Playership();
-        //generate a chosen value or default to a range between 1-6
-        this.alienPlayers = this.#generateAliens(value = Math.ceil(Math.random() * 5)); 
+        this.alienPlayers = this.#generateAliens();
+    }
+
+    #addAlienImage(squareOfNumberOfAliens) {
+        let alienContainer = document.querySelector('.enemyStage');
+        alienContainer.style.gridTemplateColumns = (`repeat(${squareOfNumberOfAliens}, 1fr`);
+        alienContainer.style.gridTemplateRows = (`repeat(${squareOfNumberOfAliens}, 1fr`);
+        let alienImg = document.createElement('div');
+        alienImg.classList = 'enemyImage';
+        alienContainer.appendChild(alienImg);
     }
     
     #generateAliens() { 
         let result = [];
-        let numberOfAliens = value;
-
+        let numberOfAliens = Math.ceil(Math.random() * 6) // <=== add helper function here to ask for a value
+        let squareOfAliensForGrid = Math.ceil(Math.sqrt(numberOfAliens));
         for (let i = 0; i < numberOfAliens; i++) {
             result.push(new Alien());
+            this.#addAlienImage(squareOfAliensForGrid);
         }
         return result;
     }
 
+    #shipIsDestoyedGif(winnerOfRound) {
+        //if this target is destroyed add fire gif.
+        //at first ill add it to the last enemy image, later capture the div in a variable when clicked to attack.
+        if(winnerOfRound == 'player') {
+            let divCounter = this.alienPlayers.length;
+           
+            let alienInArray = document.querySelector(`.enemyStage :nth-child(${divCounter})`);
+            alienInArray.classList.add('fire');
+            
+        } else if(winnerOfRound == 'alien') {
+            let playerImg = document.querySelector('.playerImage');
+            playerImg.classList.add('fire');
+        }
+
+    }
+
     pickTarget() {
         return this.alienPlayers[this.alienPlayers.length - 1];
+
+        //add click event listener to choose who to destory;
     }
 
     hitOrMiss(accuracy) {
@@ -124,6 +155,7 @@ class Gameboard {
             if (this.isTheShipDestroyed(playerAttackResult)) {
                 console.log('%c I destroyed an alien ship!', 'color: green');
                 winnerOfRound = 'player';
+                this.#shipIsDestoyedGif(winnerOfRound);
                 this.alienPlayers.pop();
                 return winnerOfRound;
             }
@@ -133,6 +165,7 @@ class Gameboard {
             if (this.isTheShipDestroyed(alienAttackResult)) {
                 console.log('%c I destroyed the USS Assembly!', 'color: red');
                 winnerOfRound = 'alien';
+                this.#shipIsDestoyedGif(winnerOfRound);
                 return winnerOfRound;
             }
         }
@@ -167,5 +200,7 @@ class Gameboard {
 
 
 
-
+let game = new Gameboard();
+console.log(game.alienPlayers.length)
+game.playGame()
 
