@@ -39,8 +39,9 @@
     background-color: white;
     opacity: .8;
     display: block;
-    height: 100%;
-    width: 100%;
+    height: 40vh;
+    width: 100vw;
+    top: 30%;
     position: absolute;
     z-index: 1000;
 } 
@@ -151,6 +152,7 @@
 
 .playerStats {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 1px solidblack;
@@ -189,6 +191,7 @@
 
 .enemyStats {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 1px solidblack;

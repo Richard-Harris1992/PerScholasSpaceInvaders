@@ -130,6 +130,7 @@ class Gameboard {
     playerAttack(playerObj, targetObj) {
         targetObj.setHull(targetObj.getHull() - playerObj.getFirepower()); // this sets a new value for targets hull after attack;
         let enemyHullStrength = targetObj.getHull();
+        this.updateAlienStats();
         console.log('%c Take that alien scum!', 'color: green');
         return enemyHullStrength;
     }
@@ -140,6 +141,7 @@ class Gameboard {
         if (this.hitOrMiss(alienObj.getAccuracy())) {
             targetObj.setHull(targetObj.getHull() - alienObj.getFirepower()); // this sets a new value for targets hull after attack;
             enemyHullStrength = targetObj.getHull();
+            this.updatePlayerStats();
             console.log('%c I hit the USS Assembly!', 'color: red');
         } else {
             console.log('%c Miss!', 'color: red');
@@ -151,11 +153,30 @@ class Gameboard {
         return targetHull <= 0 ? true : false;
     }
 
+    updatePlayerStats() {
+        let playerHull = document.querySelector('.pHull');
+        playerHull.textContent = `Hull : ${this.player.getHull()}`;
+        let playerFirepower = document.querySelector('.pFirepower');
+        playerFirepower.textContent = `Firepower : ${this.player.getFirepower()}`;
+        let playerAccuracy = document.querySelector('.pAcc');
+        playerAccuracy.textContent = `Accuracy : ${this.player.getAccuracy()}`;
+    }
+
+    updateAlienStats() {
+        let alienHull = document.querySelector('.aHull');
+        alienHull.textContent = `Hull: ${this.alienPlayers[this.alienPlayers.length - 1].getHull()}`;
+        let alienFirepower = document.querySelector('.aFirepower');
+        alienFirepower.textContent = `Firepower: ${this.alienPlayers[this.alienPlayers.length - 1].getFirepower()}`;
+        let alienAccuracy = document.querySelector('.aAcc');
+        alienAccuracy.textContent = `Accuracy: ${this.alienPlayers[this.alienPlayers.length - 1].getAccuracy()}`;
+    }
+
     playRound() {
         let player = this.player;
         let alien = this.pickTarget();
         let winnerOfRound;
-
+      
+        
         while (true) {
             let playerAttackResult = this.playerAttack(player, alien);
             if (this.isTheShipDestroyed(playerAttackResult)) {
@@ -180,7 +201,6 @@ class Gameboard {
     retreat() {  //I will need to add functionality to this when applying to html
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'retreatModal';
-        
     }
 
     exitGame(result) {
@@ -193,24 +213,21 @@ class Gameboard {
 
 
 let game = new Gameboard();
+game.updatePlayerStats();
+game.updateAlienStats();
 
 function playGame() {
     let winnerOfGame;
-
-        
-        winnerOfGame = game.playRound();
-
-        if (game.alienPlayers.length == 0) {
-            return game.exitGame(winnerOfGame);
-        }
-
-        if (winnerOfGame == 'alien') {
-            return game.exitGame(winnerOfGame)
-        }
-        game.retreat();
-    
-    
- }
+    winnerOfGame = game.playRound();
+   
+    if (game.alienPlayers.length == 0) {
+        return game.exitGame(winnerOfGame);
+    }
+   if (winnerOfGame == 'alien') {
+        return game.exitGame(winnerOfGame)  
+    }
+    game.retreat();
+}
 
 
 let startButton = document.querySelector('.animate > button');
@@ -227,7 +244,13 @@ let retreatButton = document.querySelector('.retreat');
     game.player.setHull(20);
     let retreatModal = document.querySelector('#modal');
     retreatModal.classList = 'removeModal';
-    
+    game.updatePlayerStats();
+});
+
+let continueButton = document.querySelector('.continue');
+continueButton.addEventListener('click', function(e) {
+    let retreatModal = document.querySelector('#modal');
+    retreatModal.classList = 'removeModal';
 });
 
 let namebox = document.querySelector('.nameBox');
