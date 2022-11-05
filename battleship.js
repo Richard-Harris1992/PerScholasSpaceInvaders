@@ -211,26 +211,15 @@ class Gameboard {
 } // end Gameboard class
 
 const playGame = (gameBoard) => {
-    
+    //This adds event listeners to the retreat modal
     retreatButton(gameBoard);
     continueButton(gameBoard);
     
+    
     gameBoard.updateAlienStats();
     gameBoard.updatePlayerStats();
-    let winnerOfGame;
+    attack(gameBoard);
 
-    let attackAlien = document.querySelector('.enemyStage');
-    attackAlien.addEventListener('click', function(e) {
-       winnerOfGame = gameBoard.playRound();
-       if (gameBoard.alienPlayers.length == 0) {
-            return gameBoard.exitGame(winnerOfGame);
-        }
-    
-        if (winnerOfGame == 'alien') {
-            return gameBoard.exitGame(winnerOfGame)  
-        }
-        gameBoard.retreat();
-    });
 }
 
  const startGame = () => {
@@ -267,6 +256,22 @@ const continueButton = (gameBoard) => {
     });
 }
 
+const attack = (gameBoard) => {
+    let winnerOfGame;
+    
+    let attackAlien = document.querySelector('.enemyStage');
+    attackAlien.addEventListener('click', function(e) {
+       winnerOfGame = gameBoard.playRound();
+       if (gameBoard.alienPlayers.length == 0) {
+            return gameBoard.exitGame(winnerOfGame);
+        }
+    
+        if (winnerOfGame == 'alien') {
+            return gameBoard.exitGame(winnerOfGame)  
+        }
+        gameBoard.retreat();
+    });
+}
 
 startGame();
 
