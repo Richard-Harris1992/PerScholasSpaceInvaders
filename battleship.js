@@ -211,28 +211,29 @@ class Gameboard {
 //        the web-game.                                                                              /
 //***************************************************************************************************/
 
-
+const startGame = () => {
     let startButton = document.querySelector('.animate > button');
     startButton.addEventListener('click', function(e) {
         let introText = document.querySelector('.animate');
         introText.remove();
         playGame(new Gameboard());
     });
+}
 
 
 const playGame = (gameBoard) => {
-    //This adds event listeners to the retreat modal
+    gameBoard.updateAlienStats(gameBoard.alienPlayers[gameBoard.alienPlayers.length -1]);
     retreatButton(gameBoard);
     continueButton(gameBoard);
     attack(gameBoard);
     playAgain(gameBoard);
 }
 
-
 const retreatButton = (gameBoard) => {
     let retreatButton = document.querySelector('.retreat');
     retreatButton.addEventListener('click', function(e) {
         gameBoard.player.setHull(20);
+        gameBoard.updatePlayerStats(gameBoard.player);
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'removeModal';
         retreatButton.style.display = 'none';
@@ -275,5 +276,5 @@ const playAgain = (gameBoard) => {
     });
 }
 
-
+startGame();
 
