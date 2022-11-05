@@ -234,6 +234,7 @@ const retreatButton = (gameBoard) => {
     retreatButton.addEventListener('click', function(e) {
         gameBoard.player.setHull(20);
         gameBoard.updatePlayerStats(gameBoard.player);
+        gameBoard.updateAlienStats(gameBoard.alienPlayers[gameBoard.alienPlayers.length -1]);
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'removeModal';
         retreatButton.style.display = 'none';
@@ -247,6 +248,8 @@ const continueButton = (gameBoard) => {
     continueButton.addEventListener('click', function(e) {
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'removeModal';
+        gameBoard.updatePlayerStats(gameBoard.player);
+        gameBoard.updateAlienStats(gameBoard.alienPlayers[gameBoard.alienPlayers.length -1]);
     });
 }
 
