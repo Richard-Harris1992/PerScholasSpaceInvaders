@@ -210,6 +210,12 @@ class Gameboard {
     
 } // end Gameboard class
 
+//***************************************************************************************************/
+//       The below functions are for instanciating the gameboard and provide interaction with        /
+//        the web-game.                                                                              /
+//***************************************************************************************************/
+
+
 const playGame = (gameBoard) => {
     //This adds event listeners to the retreat modal
     retreatButton(gameBoard);
@@ -258,7 +264,7 @@ const continueButton = (gameBoard) => {
 
 const attack = (gameBoard) => {
     let winnerOfGame;
-    
+
     let attackAlien = document.querySelector('.enemyStage');
     attackAlien.addEventListener('click', function(e) {
        winnerOfGame = gameBoard.playRound();
