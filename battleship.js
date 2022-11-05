@@ -1,10 +1,3 @@
-/*  ********************************************************************************************************************************
-/
-/                       READ ALL COMMENTS AND MAKE CHANGES / ADD FUNCTIONALITY. LEAVE NO UNUSED CODE OR COMMENTS
-/
-************************************************************************************************************************************/
-            //********************Final thing to add is a winner modal / replay screen ************** */
-
 class Spaceship {
     constructor() {
         this.name = 'Spaceship';
@@ -63,7 +56,6 @@ class Alien extends Spaceship{
 
 } //end Alien class
 
-//this is the class where we can perform the key functionality of the game.
 class Gameboard { 
     constructor() {
         this.name = 'Space Battle';
@@ -97,13 +89,13 @@ class Gameboard {
     }
 
     #shipIsDestoyedGif(winnerOfRound) {
-        if(winnerOfRound == 'player') {
+        if(winnerOfRound == 'USS Assembly') {
             let alienTarget = this.alienPlayers.length;
            
             let alienInArray = document.querySelector(`.enemyStage :nth-child(${alienTarget})`);
             alienInArray.classList.add('fire');
             
-        } else if(winnerOfRound == 'alien') {
+        } else if(winnerOfRound == 'Alien') {
             let playerImg = document.querySelector('.playerImage');
             playerImg.classList.add('fire');
         }
@@ -125,7 +117,7 @@ class Gameboard {
             // this sets a new value for targets hull after attack;
             targetObj.setHull(targetObj.getHull() - playerObj.getFirepower()); 
             enemyHullStrength = targetObj.getHull();
-            this.updateAlienStats();
+            this.updateAlienStats(targetObj);
             console.log('%c Take that alien scum!', 'color: green');
         } else {
             console.log('%c Miss!', 'color: green');
@@ -161,18 +153,20 @@ class Gameboard {
         playerAccuracy.textContent = `Accuracy : ${this.player.getAccuracy()}`;
     }
 
-    updateAlienStats() {
+    updateAlienStats(alien) {
         let alienHull = document.querySelector('.aHull');
-        alienHull.textContent = `Hull: ${this.alienPlayers[this.alienPlayers.length - 1].getHull()}`;
+        alienHull.textContent = `Hull: ${alien.getHull()}`;
         let alienFirepower = document.querySelector('.aFirepower');
-        alienFirepower.textContent = `Firepower: ${this.alienPlayers[this.alienPlayers.length - 1].getFirepower()}`;
+        alienFirepower.textContent = `Firepower: ${alien.getFirepower()}`;
         let alienAccuracy = document.querySelector('.aAcc');
-        alienAccuracy.textContent = `Accuracy: ${this.alienPlayers[this.alienPlayers.length - 1].getAccuracy()}`;
+        alienAccuracy.textContent = `Accuracy: ${alien.getAccuracy()}`;
     }
 
     playRound() {
         let player = this.player;
         let alien = this.pickTarget();
+        this.updateAlienStats(alien);
+        this.updatePlayerStats();
         let winnerOfRound;
       
         
@@ -180,7 +174,7 @@ class Gameboard {
             let playerAttackResult = this.playerAttack(player, alien);
             if (this.isTheShipDestroyed(playerAttackResult)) {
                 console.log('%c I destroyed an alien ship!', 'color: green');
-                winnerOfRound = 'player';
+                winnerOfRound = 'USS Assembly';
                 this.#shipIsDestoyedGif(winnerOfRound);
                 this.alienPlayers.pop();
                 return winnerOfRound;
@@ -190,7 +184,7 @@ class Gameboard {
 
             if (this.isTheShipDestroyed(alienAttackResult)) {
                 console.log('%c I destroyed the USS Assembly!', 'color: red');
-                winnerOfRound = 'alien';
+                winnerOfRound = 'Alien';
                 this.#shipIsDestoyedGif(winnerOfRound);
                 return winnerOfRound;
             }
@@ -203,39 +197,37 @@ class Gameboard {
     }
 
     exitGame(result) {
+        let endGameModal = document.getElementById('screen');
+        endGameModal.classList = 'winnerScreen';
+        document.querySelector('#screen > p').textContent = `The Winner is the ${result}`;
         console.log(`The ${result} won!`);
-
     }
 
     
 } // end Gameboard class
 
 //***************************************************************************************************/
-//       The below functions are for instanciating the gameboard and provide interaction with        /
+//       The below functions are for instantiating the gameboard and provide interaction with        /
 //        the web-game.                                                                              /
 //***************************************************************************************************/
 
 
-const playGame = (gameBoard) => {
-    //This adds event listeners to the retreat modal
-    retreatButton(gameBoard);
-    continueButton(gameBoard);
-    
-    
-    gameBoard.updateAlienStats();
-    gameBoard.updatePlayerStats();
-    attack(gameBoard);
-
-}
-
- const startGame = () => {
     let startButton = document.querySelector('.animate > button');
     startButton.addEventListener('click', function(e) {
         let introText = document.querySelector('.animate');
         introText.remove();
         playGame(new Gameboard());
     });
+
+
+const playGame = (gameBoard) => {
+    //This adds event listeners to the retreat modal
+    retreatButton(gameBoard);
+    continueButton(gameBoard);
+    attack(gameBoard);
+    playAgain(gameBoard);
 }
+
 
 const retreatButton = (gameBoard) => {
     let retreatButton = document.querySelector('.retreat');
@@ -243,12 +235,9 @@ const retreatButton = (gameBoard) => {
         gameBoard.player.setHull(20);
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'removeModal';
-        gameBoard.updatePlayerStats();
-        gameBoard.updateAlienStats();
-        retreatButton.remove();
+        retreatButton.style.display = 'none';
         document.querySelector('.continue').style.marginLeft = '45%';
         document.querySelector('#modal > p').textContent = 'Please click continue.';
-        retreatButton.removeEventListener();
     });
 }
 
@@ -257,8 +246,6 @@ const continueButton = (gameBoard) => {
     continueButton.addEventListener('click', function(e) {
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'removeModal';
-        gameBoard.updateAlienStats();
-        gameBoard.updatePlayerStats();
     });
 }
 
@@ -272,12 +259,21 @@ const attack = (gameBoard) => {
             return gameBoard.exitGame(winnerOfGame);
         }
     
-        if (winnerOfGame == 'alien') {
+        if (winnerOfGame == 'Alien') {
             return gameBoard.exitGame(winnerOfGame)  
         }
         gameBoard.retreat();
     });
 }
 
-startGame();
+const playAgain = (gameBoard) => {
+    let playAgainButton = document.querySelector('.playAgain');
+    playAgainButton.addEventListener('click', function(e) {
+        let endGameModal = document.getElementById('screen');
+        endGameModal.classList = 'hiddenWinnerScreen';
+        window.location.reload(false);
+    });
+}
+
+
 
