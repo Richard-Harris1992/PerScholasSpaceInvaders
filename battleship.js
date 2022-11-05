@@ -3,10 +3,7 @@
 /                       READ ALL COMMENTS AND MAKE CHANGES / ADD FUNCTIONALITY. LEAVE NO UNUSED CODE OR COMMENTS
 /
 ************************************************************************************************************************************/
-
-//Initial thoughts, add functionality in the methods when available. If I cannot directly use the method to do something I will need to create a
-//function and add it to the other methods. example = generate aliens vs a method to popup and choose enemy amounts.
-//CSS for style JS for functionality i.e add classes in css and use JS to modify classes to style accordingly.
+            //********************Final thing to add is a winner modal / replay screen ************** */
 
 class Spaceship {
     constructor() {
@@ -47,10 +44,8 @@ class Alien extends Spaceship{
         this.hull = this.#determineValue(7, 20);
         this.firepower = this.#determineValue(2, 5);
         this.accuracy = this.#determineValue(.6, .9);
-        this.HTMLElement = null;
+        
     }
-//add to prop./\
-    // Private method to determine randomized property values.
     #determineValue(minInclusive, maxExclusive) { 
         let min;
         let max;
@@ -74,42 +69,38 @@ class Gameboard {
         this.name = 'Space Battle';
         this.player = new Playership();
         this.alienPlayers = this.#generateAliens();
-        this.alienPlayersOnHTML = this.#addAlienImage();
-       
     }
 
-    
     #generateAliens() { 
         let result = [];
         let numberOfAliens = Math.ceil(Math.random() * 6) // <=== add helper function here to ask for a value
         for (let i = 0; i < numberOfAliens; i++) {
             result.push(new Alien());
+            result[i].aliensOnHtml = this.#addAlienImage(numberOfAliens);
         }
         return result;
     }
 
-    #addAlienImage() {
-        let result = [];
-        let squareOfAliensForGrid = Math.ceil(Math.sqrt(this.alienPlayers.length));
+    #addAlienImage(numberOfAliens) {
+        
+        let squareOfAlienCountForGrid = Math.ceil(Math.sqrt(numberOfAliens));
         let alienContainer = document.querySelector('.enemyStage');
-        alienContainer.style.gridTemplateColumns = (`repeat(${squareOfAliensForGrid}, 1fr`);
-        alienContainer.style.gridTemplateRows = (`repeat(${squareOfAliensForGrid}, 1fr`);
-        this.alienPlayers.forEach(element => {
-            let alienImg = document.createElement('div');
-            alienImg.classList = 'enemyImage';
-            result.push(alienImg);
-            alienContainer.appendChild(alienImg); 
-        });
-        return result;
+        alienContainer.style.gridTemplateColumns = (`repeat(${squareOfAlienCountForGrid}, 1fr`);
+        alienContainer.style.gridTemplateRows = (`repeat(${squareOfAlienCountForGrid}, 1fr`);
+        
+        let alienImg = document.createElement('div');
+        alienImg.classList = 'enemyImage';
+        let alienHTML = alienImg;
+        alienContainer.appendChild(alienImg); 
+    
+        return alienHTML;
     }
 
     #shipIsDestoyedGif(winnerOfRound) {
-        //if this target is destroyed add fire gif.
-        //at first ill add it to the last enemy image, later capture the div in a variable when clicked to attack.
         if(winnerOfRound == 'player') {
-            let divCounter = this.alienPlayers.length;
+            let alienTarget = this.alienPlayers.length;
            
-            let alienInArray = document.querySelector(`.enemyStage :nth-child(${divCounter})`);
+            let alienInArray = document.querySelector(`.enemyStage :nth-child(${alienTarget})`);
             alienInArray.classList.add('fire');
             
         } else if(winnerOfRound == 'alien') {
@@ -128,10 +119,17 @@ class Gameboard {
     }
 
     playerAttack(playerObj, targetObj) {
-        targetObj.setHull(targetObj.getHull() - playerObj.getFirepower()); // this sets a new value for targets hull after attack;
         let enemyHullStrength = targetObj.getHull();
-        this.updateAlienStats();
-        console.log('%c Take that alien scum!', 'color: green');
+
+        if(this.hitOrMiss(playerObj.getAccuracy())) {
+            // this sets a new value for targets hull after attack;
+            targetObj.setHull(targetObj.getHull() - playerObj.getFirepower()); 
+            enemyHullStrength = targetObj.getHull();
+            this.updateAlienStats();
+            console.log('%c Take that alien scum!', 'color: green');
+        } else {
+            console.log('%c Miss!', 'color: green');
+        }
         return enemyHullStrength;
     }
 
@@ -139,7 +137,8 @@ class Gameboard {
         let enemyHullStrength = targetObj.getHull();
 
         if (this.hitOrMiss(alienObj.getAccuracy())) {
-            targetObj.setHull(targetObj.getHull() - alienObj.getFirepower()); // this sets a new value for targets hull after attack;
+            // this sets a new value for targets hull after attack;
+            targetObj.setHull(targetObj.getHull() - alienObj.getFirepower()); 
             enemyHullStrength = targetObj.getHull();
             this.updatePlayerStats();
             console.log('%c I hit the USS Assembly!', 'color: red');
@@ -198,64 +197,76 @@ class Gameboard {
         }
     }
 
-    retreat() {  //I will need to add functionality to this when applying to html
+    retreat() {  
         let retreatModal = document.querySelector('#modal');
         retreatModal.classList = 'retreatModal';
     }
 
     exitGame(result) {
         console.log(`The ${result} won!`);
-        //add replay feature
+
     }
 
     
 } // end Gameboard class
 
-
-let game = new Gameboard();
-game.updatePlayerStats();
-game.updateAlienStats();
-
-function playGame() {
+const playGame = (gameBoard) => {
+    
+    retreatButton(gameBoard);
+    continueButton(gameBoard);
+    
+    gameBoard.updateAlienStats();
+    gameBoard.updatePlayerStats();
     let winnerOfGame;
-    winnerOfGame = game.playRound();
-   
-    if (game.alienPlayers.length == 0) {
-        return game.exitGame(winnerOfGame);
-    }
-   if (winnerOfGame == 'alien') {
-        return game.exitGame(winnerOfGame)  
-    }
-    game.retreat();
+
+    let attackAlien = document.querySelector('.enemyStage');
+    attackAlien.addEventListener('click', function(e) {
+       winnerOfGame = gameBoard.playRound();
+       if (gameBoard.alienPlayers.length == 0) {
+            return gameBoard.exitGame(winnerOfGame);
+        }
+    
+        if (winnerOfGame == 'alien') {
+            return gameBoard.exitGame(winnerOfGame)  
+        }
+        gameBoard.retreat();
+    });
+}
+
+ const startGame = () => {
+    let startButton = document.querySelector('.animate > button');
+    startButton.addEventListener('click', function(e) {
+        let introText = document.querySelector('.animate');
+        introText.remove();
+        playGame(new Gameboard());
+    });
+}
+
+const retreatButton = (gameBoard) => {
+    let retreatButton = document.querySelector('.retreat');
+    retreatButton.addEventListener('click', function(e) {
+        gameBoard.player.setHull(20);
+        let retreatModal = document.querySelector('#modal');
+        retreatModal.classList = 'removeModal';
+        gameBoard.updatePlayerStats();
+        gameBoard.updateAlienStats();
+        retreatButton.remove();
+        document.querySelector('.continue').style.marginLeft = '45%';
+        document.querySelector('#modal > p').textContent = 'Please click continue.';
+        retreatButton.removeEventListener();
+    });
+}
+
+const continueButton = (gameBoard) => {
+    let continueButton = document.querySelector('.continue');
+    continueButton.addEventListener('click', function(e) {
+        let retreatModal = document.querySelector('#modal');
+        retreatModal.classList = 'removeModal';
+        gameBoard.updateAlienStats();
+        gameBoard.updatePlayerStats();
+    });
 }
 
 
-let startButton = document.querySelector('.animate > button');
-startButton.addEventListener('click', function(e) {
-    let introText = document.querySelector('.animate');
-    introText.remove();
-    console.log(game.alienPlayers)
-    console.log(game.alienPlayersOnHTML)
-    
-});
-
-let retreatButton = document.querySelector('.retreat');
-    retreatButton.addEventListener('click', function(e) {
-    game.player.setHull(20);
-    let retreatModal = document.querySelector('#modal');
-    retreatModal.classList = 'removeModal';
-    game.updatePlayerStats();
-});
-
-let continueButton = document.querySelector('.continue');
-continueButton.addEventListener('click', function(e) {
-    let retreatModal = document.querySelector('#modal');
-    retreatModal.classList = 'removeModal';
-});
-
-let namebox = document.querySelector('.nameBox');
-namebox.addEventListener('click', function(e) {
-    playGame();
-});
-
+startGame();
 

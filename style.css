@@ -9,7 +9,6 @@
     background-color: black;
     color: white;
     
-    
 }
 
 * {
@@ -29,8 +28,7 @@
     z-index: 30;
     background-color: black;
 }
-.retreatModal {
-    
+.retreatModal { 
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -46,11 +44,30 @@
     z-index: 1000;
 } 
 
+.retreatModal > p {
+    text-align: center;
+    margin-top: 5%;
+    font-size: 30px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.retreatModal > button {
+    margin-left: 30%;
+    margin-top: 3%;
+    padding: 20px;
+    border-radius: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 25px;
+    background-color: black;
+    color : white
+
+}
+
 .removeModal {
     display: none
 }
 
-.animate>p {
+.animate > p {
     color: black;
     font-size: 40px;
     font-family: 'Share Tech Mono', monospace;
@@ -81,6 +98,12 @@
     animation-duration: 4s;
     animation-delay: 9s;
     animation-fill-mode: forwards;
+}
+
+.text5 {
+    animation-name: fade-in;
+    animation-duration: 4s;
+    animation-delay: 9s;
 }
 
 @keyframes fade-in {
