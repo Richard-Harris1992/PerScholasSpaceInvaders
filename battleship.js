@@ -111,18 +111,18 @@ class Gameboard {
     }
 
     playerAttack(playerObj, targetObj) {
-        let enemyHullStrength = targetObj.getHull();
+        let currentEnemyHullStrength = targetObj.getHull();
 
         if(this.hitOrMiss(playerObj.getAccuracy())) {
             // this sets a new value for targets hull after attack;
             targetObj.setHull(targetObj.getHull() - playerObj.getFirepower()); 
-            enemyHullStrength = targetObj.getHull();
+            currentEnemyHullStrength = targetObj.getHull();
             this.updateAlienStats(targetObj);
             console.log('%c Take that alien scum!', 'color: green');
         } else {
             console.log('%c Miss!', 'color: green');
         }
-        return enemyHullStrength;
+        return currentEnemyHullStrength;
     }
 
     alienAttack(alienObj, targetObj) {
