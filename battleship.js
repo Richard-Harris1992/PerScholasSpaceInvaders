@@ -236,6 +236,7 @@ const retreatButton = (gameBoard) => {
         gameBoard.updatePlayerStats(gameBoard.player);
         gameBoard.updateAlienStats(gameBoard.alienPlayers[gameBoard.alienPlayers.length -1]);
         let retreatModal = document.querySelector('#modal');
+        console.log('%c I am going to retreat!', 'color: green');
         retreatModal.classList = 'removeModal';
         retreatButton.style.display = 'none';
         document.querySelector('.continue').style.marginLeft = '45%';
