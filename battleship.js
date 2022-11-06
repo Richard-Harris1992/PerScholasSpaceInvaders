@@ -225,7 +225,7 @@ const playGame = (gameBoard) => {
     gameBoard.updateAlienStats(gameBoard.alienPlayers[gameBoard.alienPlayers.length -1]);
     retreatButton(gameBoard);
     continueButton(gameBoard);
-    attack(gameBoard);
+    clickAleinToAttack(gameBoard);
     playAgain(gameBoard);
 }
 
@@ -253,7 +253,7 @@ const continueButton = (gameBoard) => {
     });
 }
 
-const attack = (gameBoard) => {
+const clickAleinToAttack = (gameBoard) => {
     let winnerOfGame;
 
     let attackAlien = document.querySelector('.enemyStage');
