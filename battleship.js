@@ -275,7 +275,7 @@ const playAgain = (gameBoard) => {
     let playAgainButton = document.querySelector('.playAgain');
     playAgainButton.addEventListener('click', function(e) {
         let endGameModal = document.getElementById('screen');
-        endGameModal.classList = 'hiddenWinnerScreen';
+        endGameModal.classList = 'removeModal';
         window.location.reload(false);
     });
 }

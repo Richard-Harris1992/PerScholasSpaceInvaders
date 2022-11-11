@@ -110,9 +110,7 @@
     color : black;
 }
 
-.hiddenWinnerScreen {
-    display: none;
-}
+
 
 
 .removeModal {
@@ -219,7 +217,7 @@
     border: 1px solidblack;
     width: 30vw;
     height: 40vh;
-    background-image: url("/images/space_hero.gif");
+    background-image: url("./images/space_hero.gif");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -248,7 +246,7 @@
 
 .enemyImage {
     border: 1px solidblack;
-    background-image: url("/images/enemy.gif");
+    background-image: url("./images/enemy.gif");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -257,7 +255,7 @@
 
 .fire {
     border: 1px solidblack;
-    background-image: url("/images/fire.gif");
+    background-image: url("./images/fire.gif");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
